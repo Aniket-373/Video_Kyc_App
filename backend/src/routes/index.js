@@ -1,12 +1,14 @@
 const router = require("express").Router();
 
+// Main API routes
 router.use("/auth", require("./auth.routes"));
 
+// Health check route
 router.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "OK",
-    service: "Video KYC Backend",
-    time: new Date().toISOString(),
+  res.json({ 
+    status: "OK", 
+    timestamp: new Date().toISOString(),
+    service: "Video KYC Backend"
   });
 });
 

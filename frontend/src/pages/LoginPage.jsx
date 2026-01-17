@@ -1,353 +1,3 @@
-// import React, { useState } from 'react';
-// import {
-//   Box,
-//   TextField,
-//   InputAdornment,
-//   Button,
-//   Typography,
-//   Select,
-//   MenuItem,
-//   FormControl,
-//   InputLabel,
-//   Paper,
-//   Grid,
-//   Container,
-// } from '@mui/material';
-// import {
-//   Email as EmailIcon,
-//   Lock as LockIcon,
-//   Person as PersonIcon
-// } from '@mui/icons-material';
-
-// // Import images
-// import loginImage from '../assets/login-bg.png'; 
-// import wavingHand from '../assets/waving-hand.png'; 
-
-// const LoginPage = () => {
-//   const [formData, setFormData] = useState({
-//     email: '',
-//     password: '',
-//     role: ''
-//   });
-
-//   const handleChange = (field) => (event) => {
-//     setFormData(prev => ({
-//       ...prev,
-//       [field]: event.target.value
-//     }));
-//   };
-
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
-//     console.log('Login data:', formData);
-//   };
-
-//   return (
-//     <Container 
-//       maxWidth={false} 
-//       disableGutters 
-//       sx={{ 
-//         height: '100vh',
-//         overflow: 'hidden'
-//       }}
-//     >
-//       <Grid container sx={{ height: '100vh' }}>
-//         {/* Left Side - Image */}
-//         <Grid 
-//           item 
-//           xs={false}
-//           lg={7}
-//           sx={{
-//             display: { xs: 'none', lg: 'block' },
-//             height: '100vh',
-//             overflow: 'hidden'
-//           }}
-//         >
-//           <Box
-//             component="img"
-//             src={loginImage}
-//             alt="Login Background"
-//             sx={{
-//               width: '100%',
-//               height: '100%',
-//               objectFit: 'cover',
-//               display: 'block'
-//             }}
-//           />
-//         </Grid>
-
-//         {/* Right Side - Login Content */}
-//         <Grid 
-//           item 
-//           xs={12}
-//           lg={5}
-//           sx={{
-//             height: '100vh',
-//             display: 'flex',
-//             alignItems: 'center',
-//             justifyContent: 'center',
-//             backgroundColor: 'white',
-//             overflow: 'auto',
-//           }}
-//         >
-//           <Paper 
-//             elevation={0}
-//             sx={{
-//               width: '100%',
-//               maxWidth: {
-//                 xs: '400px',
-//                 md: '450px',
-//                 lg: '400px',
-//                 xl: '450px'
-//               },
-//               backgroundColor: 'transparent',
-//               p: { 
-//                 xs: 3,
-//                 md: 4,
-//                 lg: 4,
-//                 xl: 5
-//               },
-//               mx: {
-//                 xs: 2,
-//                 md: 3,
-//                 lg: 4,
-//               }
-//             }}
-//           >
-//             {/* Header Section */}
-//             <Box sx={{ 
-//               mb: 4, 
-//               textAlign: { xs: 'center', lg: 'left' }
-//             }}>
-//               {/* Hello, Again! with waving hand */}
-//               <Box sx={{ 
-//                 display: 'flex', 
-//                 alignItems: 'center', 
-//                 gap: 1,
-//                 mb: 1,
-//                 justifyContent: { xs: 'center', lg: 'flex-start' }
-//               }}>
-//                 <Typography 
-//                   variant="h3" 
-//                   component="h1"
-//                   sx={{
-//                     fontWeight: 700,
-//                     color: '#212529',
-//                     fontSize: { 
-//                       xs: '1.75rem',
-//                       md: '2rem',
-//                       lg: '2.125rem',
-//                       xl: '2.25rem'
-//                     },
-//                     lineHeight: 1.2
-//                   }}
-//                 >
-//                   Hello, Again!
-//                 </Typography>
-//                 <Box
-//                   component="img"
-//                   src={wavingHand}
-//                   alt="Waving hand"
-//                   sx={{
-//                     width: { 
-//                       xs: '28px', 
-//                       md: '32px', 
-//                       lg: '34px',
-//                       xl: '36px'
-//                     },
-//                     height: { 
-//                       xs: '28px', 
-//                       md: '32px', 
-//                       lg: '34px',
-//                       xl: '36px'
-//                     }
-//                   }}
-//                 />
-//               </Box>
-
-//               {/* Subheading */}
-//               <Typography 
-//                 variant="h6"
-//                 sx={{
-//                   color: '#6c757d',
-//                   fontWeight: 400,
-//                   fontSize: { 
-//                     xs: '0.9rem', 
-//                     md: '1rem', 
-//                     lg: '1.05rem',
-//                     xl: '1.1rem'
-//                   }
-//                 }}
-//               >
-//                 Welcome Back
-//               </Typography>
-//             </Box>
-
-//             {/* Login Form */}
-//             <Box component="form" onSubmit={handleSubmit}>
-//               {/* Email Field */}
-//               <TextField
-//                 fullWidth
-//                 label="Email Address"
-//                 variant="outlined"
-//                 value={formData.email}
-//                 onChange={handleChange('email')}
-//                 sx={{
-//                   mb: 3,
-//                   '& .MuiOutlinedInput-root': {
-//                     '& fieldset': {
-//                       borderColor: '#dee2e6',
-//                     },
-//                     '&:hover fieldset': {
-//                       borderColor: '#1C43A6',
-//                     },
-//                     '&.Mui-focused fieldset': {
-//                       borderColor: '#1C43A6',
-//                     },
-//                   },
-//                   '& .MuiInputLabel-root': {
-//                     color: '#6c757d',
-//                     '&.Mui-focused': {
-//                       color: '#1C43A6',
-//                     },
-//                   },
-//                 }}
-//                 InputProps={{
-//                   startAdornment: (
-//                     <InputAdornment position="start">
-//                       <EmailIcon sx={{ color: '#6c757d' }} />
-//                     </InputAdornment>
-//                   ),
-//                 }}
-//               />
-
-//               {/* Password Field */}
-//               <TextField
-//                 fullWidth
-//                 label="Enter your Password"
-//                 type="password"
-//                 variant="outlined"
-//                 value={formData.password}
-//                 onChange={handleChange('password')}
-//                 sx={{
-//                   mb: 3,
-//                   '& .MuiOutlinedInput-root': {
-//                     '& fieldset': {
-//                       borderColor: '#dee2e6',
-//                     },
-//                     '&:hover fieldset': {
-//                       borderColor: '#1C43A6',
-//                     },
-//                     '&.Mui-focused fieldset': {
-//                       borderColor: '#1C43A6',
-//                     },
-//                   },
-//                   '& .MuiInputLabel-root': {
-//                     color: '#6c757d',
-//                     '&.Mui-focused': {
-//                       color: '#1C43A6',
-//                     },
-//                   },
-//                 }}
-//                 InputProps={{
-//                   startAdornment: (
-//                     <InputAdornment position="start">
-//                       <LockIcon sx={{ color: '#6c757d' }} />
-//                     </InputAdornment>
-//                   ),
-//                 }}
-//               />
-
-//               {/* Role Dropdown */}
-//               <FormControl fullWidth sx={{ mb: 4 }}>
-//                 <InputLabel 
-//                   sx={{
-//                     color: '#6c757d',
-//                     '&.Mui-focused': {
-//                       color: '#1C43A6',
-//                     },
-//                   }}
-//                 >
-//                   Select Role
-//                 </InputLabel>
-//                 <Select
-//                   value={formData.role}
-//                   onChange={handleChange('role')}
-//                   label="Select Role"
-//                   startAdornment={
-//                     <InputAdornment position="start" sx={{ mr: 1 }}>
-//                       <PersonIcon sx={{ color: '#6c757d' }} />
-//                     </InputAdornment>
-//                   }
-//                   sx={{
-//                     '& .MuiOutlinedInput-notchedOutline': {
-//                       borderColor: '#dee2e6',
-//                     },
-//                     '&:hover .MuiOutlinedInput-notchedOutline': {
-//                       borderColor: '#1C43A6',
-//                     },
-//                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-//                       borderColor: '#1C43A6',
-//                     },
-//                   }}
-//                 >
-//                   <MenuItem value="agent">Agent</MenuItem>
-//                   <MenuItem value="auditor">Auditor</MenuItem>
-//                   <MenuItem value="super-admin">Super Admin</MenuItem>
-//                 </Select>
-//               </FormControl>
-
-//               {/* Login Button */}
-//               <Button
-//                 type="submit"
-//                 fullWidth
-//                 variant="contained"
-//                 sx={{
-//                   backgroundColor: '#1C43A6',
-//                   color: 'white',
-//                   py: 1.5,
-//                   fontSize: '1rem',
-//                   fontWeight: 500,
-//                   textTransform: 'none',
-//                   borderRadius: '4px',
-//                   '&:hover': {
-//                     backgroundColor: '#15337D',
-//                   },
-//                   mb: 2
-//                 }}
-//               >
-//                 Login
-//               </Button>
-
-//               {/* Forgot Password Link */}
-//               <Box sx={{ textAlign: 'center' }}>
-//                 <Typography
-//                   component="a"
-//                   href="#"
-//                   sx={{
-//                     color: '#1C43A6',
-//                     textDecoration: 'none',
-//                     fontSize: '0.875rem',
-//                     fontWeight: 500,
-//                     '&:hover': {
-//                       textDecoration: 'underline',
-//                       color: '#15337D'
-//                     }
-//                   }}
-//                 >
-//                   Forgot Password?
-//                 </Typography>
-//               </Box>
-//             </Box>
-//           </Paper>
-//         </Grid>
-//       </Grid>
-//     </Container>
-//   );
-// };
-
-// export default LoginPage;
-
 import React, { useState } from 'react';
 import {
   Paper,
@@ -361,11 +11,12 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 import { VisibilityOff, Visibility, Email, Lock } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 
-// Import your images
 import loginImage from '../assets/login-bg.png';
 import wavingHand from '../assets/waving-hand.png';
 
@@ -379,16 +30,17 @@ const LoginPage = () => {
   });
   
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (field) => (event) => {
     setFormData(prev => ({
       ...prev,
       [field]: event.target.value
     }));
+    if (error) setError('');
   };
 
-  // Toggle password visibility
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -397,55 +49,73 @@ const LoginPage = () => {
     event.preventDefault();
     
     if (!formData.email || !formData.password || !formData.role) {
-      alert('Please fill all fields');
+      setError('Please fill all fields');
+      return;
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
     setLoading(true);
+    setError('');
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
         body: JSON.stringify({
           email: formData.email,
           password: formData.password
-          // Note: role might not be needed for auth, depends on your backend
         }),
       });
 
-      const data = await response.json();
-      
-      // Debug log
-      console.log('Login response:', data);
-      console.log('Has expiresAt?', 'expiresAt' in data);
-
-      if (response.ok) {
-        // ✅ Save userId for OTP verification
-        localStorage.setItem('userId', data.userId);
-
-        // ✅ Save OTP expiry time from backend
-        if (data.expiresAt) {
-          localStorage.setItem('otpExpiry', data.expiresAt);
-          console.log('OTP expiry saved from backend:', data.expiresAt);
-        } else {
-          // Fallback: set 5 minutes from now
-          const fallbackExpiry = new Date(Date.now() + 5 * 60 * 1000);
-          localStorage.setItem('otpExpiry', fallbackExpiry.toISOString());
-          console.log('Using fallback expiry (5 min from now):', fallbackExpiry.toISOString());
-        }
-
-        // ✅ Clear any old token
-        localStorage.removeItem('token');
-        
-        // ✅ Redirect to OTP page
-        navigate('/otp');
-      } else {
-        alert(data.message || 'Login failed. Please check your credentials.');
+      // Check if response is JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await response.text();
+        console.error("Non-JSON response:", text.substring(0, 200));
+        throw new Error("Server returned an unexpected response.");
       }
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed. Please check your credentials.');
+      }
+
+      // ✅ Save agtLoginId for OTP verification
+      localStorage.setItem('agtLoginId', data.agtLoginId);
+
+      // ✅ Get OTP expiry from backend
+      if (data.expiresAt) {
+        localStorage.setItem('otpExpiry', data.expiresAt);
+      } else {
+        // Fallback: set 5 minutes from now
+        const fallbackExpiry = new Date(Date.now() + 5 * 60 * 1000);
+        localStorage.setItem('otpExpiry', fallbackExpiry.toISOString());
+      }
+
+      // ✅ Clear any old token
+      localStorage.removeItem('token');
+      
+      // ✅ Redirect to OTP page
+      navigate('/otp');
+      
     } catch (error) {
       console.error('Login error:', error);
-      alert('Network error. Please check your connection and try again.');
+      
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        setError('Cannot connect to server. Please check if backend is running on localhost:5000');
+      } else {
+        setError(error.message || 'Network error. Please check your connection and try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -544,6 +214,21 @@ const LoginPage = () => {
             </Typography>
           </Box>
 
+          {/* Error Alert */}
+          {error && (
+            <Alert 
+              severity="error" 
+              sx={{ 
+                mb: 3, 
+                borderRadius: '8px',
+                '& .MuiAlert-message': { fontSize: '0.875rem' }
+              }}
+              onClose={() => setError('')}
+            >
+              {error}
+            </Alert>
+          )}
+
           {/* Form */}
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
             <TextField
@@ -574,12 +259,13 @@ const LoginPage = () => {
                   </InputAdornment>
                 ),
               }}
+              helperText="Enter your registered email address"
             />
 
             <TextField
               fullWidth
               label="Enter your Password"
-              type={showPassword ? 'text' : 'password'} // Toggle between text and password
+              type={showPassword ? 'text' : 'password'}
               variant="outlined"
               value={formData.password}
               onChange={handleChange('password')}
@@ -662,7 +348,7 @@ const LoginPage = () => {
                 mb: 2
               }}
             >
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Login'}
             </Button>
 
             <Box sx={{ textAlign: 'center' }}>
