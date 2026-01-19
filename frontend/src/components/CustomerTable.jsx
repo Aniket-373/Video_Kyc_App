@@ -372,19 +372,6 @@ const CustomerTable = () => {
           </>
         );
 
-      // case "Past KYC Calls":
-        return (
-          <Box sx={{ mt: 2, p: 3, textAlign: 'center' }}>
-            <Typography variant="h5" component="h2" gutterBottom>
-              Past KYC Calls
-            </Typography>
-            <Typography color="textSecondary">
-              This page is under development. Coming soon!
-            </Typography>
-          </Box>
-        );
-
-
         case "Past KYC Calls":
   return (
     <Box sx={{ mt: 2 }}>

@@ -1,13 +1,13 @@
-const BASE_URL = `http://localhost:5000/api/auth/` || "";
+const BASE_URL = "http://localhost:5000/api/auth";
 
-export const apiFetch = async (url, options = {}) => {
+const apiFetch = async (url, options = {}) => {
   const response = await fetch(`${BASE_URL}${url}`, {
     headers: {
       "Content-Type": "application/json",
-      ...options.headers
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      ...options.headers,
     },
-    credentials: "include", // keep if using cookies / auth
-    ...options
+    ...options,
   });
 
   const data = await response.json();
@@ -18,3 +18,5 @@ export const apiFetch = async (url, options = {}) => {
 
   return data;
 };
+
+export default apiFetch;

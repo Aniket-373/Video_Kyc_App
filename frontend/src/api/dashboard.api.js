@@ -1,6 +1,6 @@
 
-import { httpGet } from "./https";
+import  apiFetch  from "./http";
 
 export const fetchDashboardData = (range) => {
-  return httpGet(`/work-dashboard?filter=${range}`);
+  return apiFetch(`/work-dashboard?filter=${range}`);
 };

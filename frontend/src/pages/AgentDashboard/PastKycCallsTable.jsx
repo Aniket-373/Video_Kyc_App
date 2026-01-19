@@ -11,7 +11,7 @@ import {
   Typography
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getPastKycCalls } from "../../api/kyc.api";
+import  getPastKycCalls  from "../../api/kyc.api";
 
 const StatusChip = ({ status }) => {
   if (status === "Approved")
