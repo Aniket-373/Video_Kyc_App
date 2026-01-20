@@ -1,4 +1,8 @@
+const dashboardRepo = require("../repositories/dashboard.repo");
 
+/* =========================
+   DATE RANGE
+========================= */
 
 exports.getDateRange = (filter) => {
   if (filter === "all") return null;
@@ -32,4 +36,42 @@ exports.getDateRange = (filter) => {
   return { start, end };
 };
 
+/* =========================
+   DASHBOARD DATA
+========================= */
 
+exports.getDashboardData = async (filter = "today") => {
+  const range = exports.getDateRange(filter);
+
+  let approved, rejected, discrepancy;
+
+  if (!range) {
+    approved = await dashboardRepo.countByStatus("APPROVED");
+    rejected = await dashboardRepo.countByStatus("REJECTED");
+    discrepancy = await dashboardRepo.countByStatus("DISCREPANCY");
+  } else {
+    approved = await dashboardRepo.countByStatus(
+      "APPROVED",
+      range.start,
+      range.end
+    );
+    rejected = await dashboardRepo.countByStatus(
+      "REJECTED",
+      range.start,
+      range.end
+    );
+    discrepancy = await dashboardRepo.countByStatus(
+      "DISCREPANCY",
+      range.start,
+      range.end
+    );
+  }
+
+  return {
+    label: filter,
+    total: approved + rejected + discrepancy,
+    approved,
+    rejected,
+    discrepancy
+  };
+};
