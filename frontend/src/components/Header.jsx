@@ -33,13 +33,13 @@ const Header = () => {
     const savedProfile = localStorage.getItem("profile");
     if (savedProfile) {
       setProfile(JSON.parse(savedProfile));
-    }
+    }  
 
     // Fetch from backend
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/agent/profile`, {
+    fetch(`http://localhost:5000/api/agent/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => res.json())
