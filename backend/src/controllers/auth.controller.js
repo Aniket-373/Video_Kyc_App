@@ -114,6 +114,7 @@ exports.verifyForgotOtp = async (req, res) => {
   }
 };
 
+
 exports.resetPassword = async (req, res) => {
   try {
     const authHeader = req.headers.authorization;

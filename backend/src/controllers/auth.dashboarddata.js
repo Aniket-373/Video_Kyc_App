@@ -16,6 +16,7 @@ exports.getDashboard = async (req, res) => {
       data = await dashboardRepo.getCountsByDate(range.start, range.end);
     }
 
+    
     res.json({
       success: true,
       data
