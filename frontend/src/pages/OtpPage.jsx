@@ -280,6 +280,7 @@ const detectMode = () => {
               onClick={handleResendOtp}
               disabled={loading}
               sx={{ mb: 3 }}
+              style={{color: "#1C43A6"}}
             >
               {resending ? "Sending..." : "Resend OTP"}
             </Button>
@@ -290,6 +291,7 @@ const detectMode = () => {
               variant="contained"
               disabled={loading || otp.some((d) => d === "")}
               sx={{ py: 1.5 }}
+              style={{backgroundColor: "#1C43A6", color:"white"}}
             >
               {loading ? (
                 <CircularProgress size={24} sx={{ color: "white" }} />
@@ -302,6 +304,7 @@ const detectMode = () => {
               component={Link}
               to={current.backLink}
               sx={{ display: "block", textAlign: "center", mt: 2 }}
+              style={{color: "#1C43A6"}}
             >
               ← Back
             </Typography>
