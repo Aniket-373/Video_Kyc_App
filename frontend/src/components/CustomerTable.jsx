@@ -5,12 +5,13 @@ import {
   Box,
   Tabs,
   Tab,
-  useMediaQuery,
-  useTheme,
+  // useMediaQuery,
+  // useTheme,
   InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
+
 import {
   Groups as GroupsIcon,
   History as HistoryIcon,
@@ -25,72 +26,90 @@ import Pagination from "../components/Pagination";
 import CallInitiationModal from "../components/CallInitiationModal";
 import CallEndModal from "../components/CallEndModal";
 
-// ---------- debounce ----------
+/* ---------------- debounce hook ---------------- */
 const useDebounce = (value, delay = 400) => {
   const [debounced, setDebounced] = useState(value);
+
   useEffect(() => {
     const t = setTimeout(() => setDebounced(value), delay);
     return () => clearTimeout(t);
   }, [value, delay]);
+
   return debounced;
 };
 
 const CustomerTable = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [activeTab, setActiveTab] = useState("Video KYC Waitlist");
   const [activeView, setActiveView] = useState("live");
+
   const [customers, setCustomers] = useState([]);
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search);
   const [loading, setLoading] = useState(false);
 
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
+
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
+
   const [initiationModalOpen, setInitiationModalOpen] = useState(false);
   const [endModalOpen, setEndModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const itemsPerPage = 3;
+
+  /* COUNTS (FIX #2) */
+  const [liveCount, setLiveCount] = useState(0);
+  const [missedCount, setMissedCount] = useState(0);
 
   const API_BASE = "http://localhost:5000/api/kyc";
 
-  // ---------- fetch data ----------
- const fetchData = useCallback(async () => {
-  setLoading(true);
-  try {
-    let url = "";
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      let url = "";
 
-    if (debouncedSearch) {
-      url = `${API_BASE}/search?q=${debouncedSearch}&view=${activeView}`;
-    } else if (activeView === "live") {
-      url = `${API_BASE}/live-schedule`;
-    } else {
-      url = `${API_BASE}/missed`;
+      if (debouncedSearch) {
+        url = `${API_BASE}/search?q=${debouncedSearch}&view=${activeView}`;
+      } else if (activeView === "live") {
+        url = `${API_BASE}/live-schedule`;
+      } else {
+        url = `${API_BASE}/missed`;
+      }
+
+      const res = await fetch(url);
+      const json = await res.json();
+
+      setCustomers(json.data || []);
+
+      if (activeView === "live") {
+        setLiveCount(json.totalCount ?? json.data?.length ?? 0);
+      } else {
+        setMissedCount(json.totalCount ?? json.data?.length ?? 0);
+      }
+    } catch (err) {
+      console.error(err);
+      setCustomers([]);
+    } finally {
+      setLoading(false);
     }
-
-    const res = await fetch(url);
-    const json = await res.json();
-    setCustomers(json.data || []);
-  } catch (err) {
-    console.error(err);
-    setCustomers([]);
-  } finally {
-    setLoading(false);
-  }
-}, [API_BASE, debouncedSearch, activeView]);
-
+  }, [API_BASE, debouncedSearch, activeView]);
 
   useEffect(() => {
-  if (activeTab === "Video KYC Waitlist") {
-    fetchData();
-  }
-}, [fetchData, activeTab]);
-
+    if (activeTab === "Video KYC Waitlist") {
+      fetchData();
+    }
+  }, [fetchData, activeTab]);
 
   useEffect(() => {
-  setCurrentPage(1);
-}, [debouncedSearch, activeView]);
+    setCurrentPage(1);
+  }, [debouncedSearch, activeView]);
 
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedCustomers = customers.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
   const handleOpenInitiationModal = (customer) => {
     setSelectedCustomer(customer);
@@ -117,33 +136,106 @@ const CustomerTable = () => {
     }
   };
 
-  
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedCustomers = customers.slice(
-    startIndex,
-    startIndex + itemsPerPage,
-  );
-
   return (
     <div className="card">
       <div className="card-body">
         <Tabs
           value={activeTab}
           onChange={handleTabChange}
-          variant={isMobile ? "scrollable" : "standard"}
-          scrollButtons="auto"
+          variant="standard"
+          TabIndicatorProps={{
+            sx: {
+              backgroundColor: "#1C43A6",
+              height: "2px",
+              borderRadius: "0px", 
+              top: "auto", 
+            },
+          }}
+          sx={{
+            minHeight: "44px",
+
+            "& .MuiTabs-flexContainer": {
+              display: "flex",
+              alignItems: "center",
+              gap: "24px", 
+            },
+
+            "& .MuiTabs-indicator": {
+              borderTop: "none", 
+            },
+          }}
         >
+          
           <Tab
             value="Video KYC Waitlist"
+            icon={<GroupsIcon fontSize="small" />}
+            iconPosition="start"
             label="Video KYC Waitlist"
-            icon={<GroupsIcon />}
+            disableRipple
+            sx={{
+              minHeight: "44px",
+              padding: "0",
+              textTransform: "none",
+              fontSize: "14px", 
+              fontWeight: 500,
+              color: "#111827",
+              gap: "6px", 
+              "&.Mui-selected": {
+                color: "#1C43A6",
+                fontWeight: 500, 
+              },
+
+              "& .MuiTab-iconWrapper": {
+                margin: "0",
+              },
+            }}
           />
+
+        
           <Tab
             value="Past KYC Calls"
+            icon={<HistoryIcon fontSize="small" />}
+            iconPosition="start"
             label="Past KYC Calls"
-            icon={<HistoryIcon />}
+            disableRipple
+            sx={{
+              minHeight: "44px",
+              padding: "0",
+              textTransform: "none",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "#111827",
+              gap: "6px",
+
+              "&.Mui-selected": {
+                color: "#1C43A6",
+                fontWeight: 500,
+              },
+            }}
           />
-          <Tab value="Draft List" label="Draft List" icon={<EditNoteIcon />} />
+
+         
+          <Tab
+            value="Draft List"
+            icon={<EditNoteIcon fontSize="small" />}
+            iconPosition="start"
+            label="Draft List"
+            disableRipple
+            sx={{
+              minHeight: "44px",
+              padding: "0",
+              textTransform: "none",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "#111827",
+              gap: "6px",
+
+              "&.Mui-selected": {
+                color: "#1C43A6",
+                fontWeight: 500,
+              },
+            }}
+          />
         </Tabs>
 
         <Box sx={{ borderBottom: 1, borderColor: "divider", my: 3 }} />
@@ -164,8 +256,8 @@ const CustomerTable = () => {
                   setSearch("");
                   setActiveView(v);
                 }}
-                liveCount={activeView === "live" ? customers.length : 0}
-                missedCount={activeView === "missed" ? customers.length : 0}
+                liveCount={liveCount}
+                missedCount={missedCount}
                 onRefresh={fetchData}
               />
 
@@ -191,9 +283,15 @@ const CustomerTable = () => {
                 No records found
               </Typography>
             ) : activeView === "live" ? (
-              <LiveScheduleTable customers={paginatedCustomers} onInitiateCall={handleOpenInitiationModal} />
+              <LiveScheduleTable
+                customers={paginatedCustomers}
+                onInitiateCall={handleOpenInitiationModal}
+              />
             ) : (
-              <MissedCallsTable customers={paginatedCustomers} onInitiateCall={handleOpenInitiationModal} />
+              <MissedCallsTable
+                customers={paginatedCustomers}
+                onInitiateCall={handleOpenInitiationModal}
+              />
             )}
 
             <Pagination

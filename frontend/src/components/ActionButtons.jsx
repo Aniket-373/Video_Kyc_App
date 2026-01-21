@@ -10,28 +10,25 @@ const ActionButtons = ({
   onRefresh,
 }) => {
   return (
-    <div
-      className="d-flex gap-3 my-3"
-      style={{
-        flexWrap: "wrap",
-      }}
-    >
+    <div className="d-flex gap-3 my-3" style={{ flexWrap: "wrap" }}>
       <Button
-        variant="contained"
+        variant={activeView === "live" ? "contained" : "outlined"}
         startIcon={<VideocamIcon />}
         onClick={() => onViewChange("live")}
         sx={{
-          backgroundColor: activeView === "live" ? "#1C43A6" : "#9bb0e8",
+          borderColor: "#1C43A6",
+          color: activeView === "live" ? "white" : "#1C43A6",
+          backgroundColor: activeView === "live" ? "#1C43A6" : "transparent",
           textTransform: "none",
-          padding: "8px 16px",
-          minWidth: "140px",
-          width: { xs: "100%", sm: "auto" }, 
-          fontSize: "0.875rem",
+
+          minWidth: "160px",
+          minHeight: "40px", 
+          paddingY: "8px", 
+          paddingX: "16px",
+
           "&:hover": {
             backgroundColor: "#1C43A6",
-          },
-          "& .MuiButton-startIcon": {
-            marginRight: "8px",
+            color: "white",
           },
         }}
       >
@@ -39,21 +36,18 @@ const ActionButtons = ({
       </Button>
 
       <Button
-        variant="contained"
+        variant={activeView === "missed" ? "contained" : "outlined"}
         startIcon={<MissedVideoCall />}
         onClick={() => onViewChange("missed")}
         sx={{
-          backgroundColor: activeView === "missed" ? "#F12B01" : "#f5a08c",
+          borderColor: "#F12B01",
+          color: activeView === "missed" ? "white" : "#F12B01",
+          backgroundColor: activeView === "missed" ? "#F12B01" : "transparent",
           textTransform: "none",
-          padding: "8px 16px",
-          minWidth: "140px",
-          width: { xs: "100%", sm: "auto" }, 
-          fontSize: "0.875rem",
+          minWidth: "160px",
           "&:hover": {
-            backgroundColor: "#e42803ff",
-          },
-          "& .MuiButton-startIcon": {
-            marginRight: "8px",
+            backgroundColor: "#F12B01",
+            color: "white",
           },
         }}
       >
@@ -65,18 +59,13 @@ const ActionButtons = ({
         startIcon={<Refresh />}
         onClick={onRefresh}
         sx={{
+          borderColor: "#1C43A6",
           color: "#1C43A6",
           textTransform: "none",
-          padding: "8px 16px",
           minWidth: "140px",
-          width: { xs: "100%", sm: "auto" }, 
-          fontSize: "0.875rem",
           "&:hover": {
-            backgroundColor: "#7c8cba",
+            backgroundColor: "#1C43A6",
             color: "white",
-          },
-          "& .MuiButton-startIcon": {
-            marginRight: "8px",
           },
         }}
       >

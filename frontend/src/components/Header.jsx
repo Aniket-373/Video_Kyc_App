@@ -15,6 +15,7 @@ import {
 import KeyIcon from "@mui/icons-material/VpnKey";
 import LogoutIcon from "@mui/icons-material/Logout";
 import logo from "../assets/Logo.png";
+import  WavingHand  from "../assets/waving-hand.png";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -95,7 +96,7 @@ const Header = () => {
             <>
               <Divider orientation="vertical" flexItem sx={{ height: 24 }} />
               <Typography variant="h6" sx={{ whiteSpace: "nowrap" }}>
-                Hello, {profile.agentName || "Agent"} 👋
+                Hello, {profile.agentName || "Agent"} <Box component="img" src={WavingHand} alt="Waving Hand" sx={{ height: 24, gap: 2}} />
               </Typography>
             </>
           )}
