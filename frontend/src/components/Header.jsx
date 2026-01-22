@@ -30,7 +30,7 @@ const Header = () => {
   const [profile, setProfile] = useState({});
   const open = Boolean(anchorEl);
 
-  // ⭐ LOAD PROFILE ONCE ON PAGE LOAD + AFTER LOGIN
+  // ⭐ LOAD PROFILE ONCE ON PAGE LOAD + AFTER LOGINs
   useEffect(() => {
     // Load cached profile firs
     const savedProfile = localStorage.getItem("profile");
