@@ -62,7 +62,6 @@ const LoginPage = () => {
     }
    
 
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address');
@@ -85,7 +84,7 @@ const LoginPage = () => {
         }),
       });
 
-      // Check if response is JSON
+      
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         const text = await response.text();
@@ -99,10 +98,10 @@ const LoginPage = () => {
         throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 
-      // ✅ Save agtLoginId for OTP verification
+      
       localStorage.setItem('agtLoginId', data.agtLoginId);
 
-      // ✅ Get OTP expiry from backend
+
       if (data.expiresAt) {
         localStorage.setItem('otpExpiry', data.expiresAt);
       } else {
@@ -111,10 +110,10 @@ const LoginPage = () => {
         localStorage.setItem('otpExpiry', fallbackExpiry.toISOString());
       }
 
-      // ✅ Clear any old token
+      
       localStorage.removeItem('token');
       
-      // ✅ Redirect to OTP page
+      
       navigate('/otp');
       
     } catch (error) {
@@ -143,7 +142,7 @@ const LoginPage = () => {
         overflow: 'hidden'
       }}
     >
-      {/* Left Side - Image */}
+     
       <Box
         sx={{
           width: { xs: '0%', lg: '60%' },
@@ -160,7 +159,7 @@ const LoginPage = () => {
         />
       </Box>
 
-      {/* Right Side - Login Form */}
+      
       <Box
         sx={{
           width: { xs: '100%', lg: '40%' },
@@ -185,7 +184,7 @@ const LoginPage = () => {
             justifyContent: { xs: 'center', sm: 'flex-start' }
           }}
         >
-          {/* Header */}
+         
           <Box sx={{ mb: 4, textAlign: 'center' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, justifyContent: 'left' }}>
               <Typography
@@ -223,7 +222,7 @@ const LoginPage = () => {
             </Typography>
           </Box>
 
-          {/* Error Alert */}
+          
           {error && (
             <Alert 
               severity="error" 
@@ -238,7 +237,6 @@ const LoginPage = () => {
             </Alert>
           )}
 
-          {/* Form */}
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
             <TextField
               fullWidth
