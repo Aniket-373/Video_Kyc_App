@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import API_BASE_URL from "../config/api";
 import {
   Paper,
   Box,
@@ -57,7 +57,7 @@ const ForgotPasswordPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/auth/forgot-password`,
+        `${API_BASE_URL}/api/auth/forgot-password`,
         {
           method: "POST",
           headers: { 
@@ -111,7 +111,7 @@ const ForgotPasswordPage = () => {
       
       // User-friendly error messages
       if (err.message.includes("Failed to fetch") || err.message.includes("NetworkError")) {
-        setError(`Cannot connect to server. Please check if backend is running on http://localhost:5000`);
+        setError("Cannot connect to server. Please try again later.");
       } else {
         setError(err.message || "Something went wrong. Please try again.");
       }

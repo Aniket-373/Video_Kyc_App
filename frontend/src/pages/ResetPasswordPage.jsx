@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import API_BASE_URL from "../config/api";
 import {
   Paper,
   Box,
@@ -80,7 +81,7 @@ const ResetPasswordPage = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/reset-password",
+        `${API_BASE_URL}/api/auth/reset-password`,
         {
           method: "POST",
           headers: {
