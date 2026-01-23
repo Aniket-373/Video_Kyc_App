@@ -34,6 +34,8 @@ import getPastKycCalls from "../api/kyc.api";
 import searchPastKycCalls from "../api/pastsearch";
 
 /* ---------------- debounce hook ---------------- */
+const api_base_url = import.meta.env.VITE_API_BASE_URL;
+// const api_base_url = `${API_BASE_URL}/api/kyc`;
 const useDebounce = (value, delay = 400) => {
   const [debounced, setDebounced] = useState(value);
 

@@ -1,6 +1,5 @@
 const router = require("express").Router();
 
-// Main API routes
 router.use("/auth", require("./auth.routes"));
 
 router.use("/agent", require("./agent.routes"));

@@ -42,7 +42,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use("/api", routes);
+app.use("/v1", routes);
 
 // Health check
 app.get("/", (req, res) => {

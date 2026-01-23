@@ -1,51 +1,17 @@
-const BASE_URL = "http://localhost:5000/api/kyc";
+import apiClient from "./http";
 
-const handleResponse = async (res) => {
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(error || "API Error");
-  }
-  return res.json();
-};
+export const getLiveSchedule = () =>
+  apiClient("/kyc/live-schedule");
 
-const getLiveSchedule = async () => {
-  const res = await fetch(`${BASE_URL}/live-schedule`);
-  return handleResponse(res);
-};
+export const getMissedCalls = () =>
+  apiClient("/kyc/missed");
 
-const getMissedCalls = async () => {
-  const res = await fetch(`${BASE_URL}/missed`);
-  return handleResponse(res);
-};
+export const searchKyc = (query, view = "live") =>
+  apiClient(`/kyc/search?q=${encodeURIComponent(query)}&view=${view}`);
 
-// videoKycWaitlist.api.js
- const searchMissedKyc = async (query) => {
-  const res = await fetch(
-    `${BASE_URL}/search-missed?q=${encodeURIComponent(query)}`
-  );
-  return res.json();
-};
+export const refreshDashboard = () =>
+  apiClient("/kyc/refresh");
 
 
-const searchKyc = async (query, view = "live") => {
-  return handleResponse(
-    await fetch(
-      `${BASE_URL}/search?q=${encodeURIComponent(query)}&view=${view}`
-    )
-  );
-};
-
-
-const refreshDashboard = async () => {
-  const res = await fetch(`${BASE_URL}/refresh`);
-  return handleResponse(res);
-};
-
-/* ✅ NAMED EXPORTS */
-export {
-  getLiveSchedule,
-  searchMissedKyc,
-  searchKyc,
-  refreshDashboard,
-  getMissedCalls
-};
+export const searchPastKycCalls = (query) =>
+  apiClient(`/api/past-kyc/search?q=${encodeURIComponent(query)}`);

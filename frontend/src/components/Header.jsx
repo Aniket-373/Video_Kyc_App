@@ -1,3 +1,5 @@
+import API_BASE_URL from "../config/api";
+
 import { Bell } from "lucide-react";
 import {
   Avatar,
@@ -28,7 +30,7 @@ const Header = () => {
   const [profile, setProfile] = useState({});
   const open = Boolean(anchorEl);
 
-  // ⭐ LOAD PROFILE ONCE ON PAGE LOAD + AFTER LOGIN
+  // ⭐ LOAD PROFILE ONCE ON PAGE LOAD + AFTER LOGINs
   useEffect(() => {
     // Load cached profile firs
     const savedProfile = localStorage.getItem("profile");
@@ -40,7 +42,7 @@ const Header = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch(`http://localhost:5000/api/agent/profile`, {
+    fetch(`${API_BASE_URL}/agent/profile`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then((res) => res.json())

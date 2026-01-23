@@ -112,7 +112,7 @@ const PastKycCallsTable = ({ data = [], loading = false }) => {
             <TableCell><b>Customer Name</b></TableCell>
             <TableCell><b>Client Name</b></TableCell>
             <TableCell><b>VCIP ID</b></TableCell>
-            {/* <TableCell><b>Contact Number</b></TableCell> */}
+            <TableCell><b>Contact Number</b></TableCell>
             <TableCell><b>Connection ID</b></TableCell>
             <TableCell><b>Call Status</b></TableCell>
           </TableRow>
@@ -127,17 +127,9 @@ const PastKycCallsTable = ({ data = [], loading = false }) => {
               <TableCell>{row.vcipId || "-"}</TableCell>
 
               {/* ✅ Contact Number */}
-              {/* <TableCell>
-                {row.mobileNumber ? (
-                  <Typography
-                    sx={{ fontWeight: 500, color: "#2563eb" }}
-                  >
-                    {row.mobileNumber}
-                  </Typography>
-                ) : (
-                  "-"
-                )}
-              </TableCell> */}
+              <TableCell>               
+                    {row.mobileNumber || "-"}                      
+              </TableCell>
 
               <TableCell>{row.connectionId ?? "-"}</TableCell>
 
