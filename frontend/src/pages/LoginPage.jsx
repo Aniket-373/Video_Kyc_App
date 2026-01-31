@@ -17,36 +17,32 @@ import {
 } from '@mui/material';
 import { VisibilityOff, Visibility, Email, Lock } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-
+// import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import loginImage from '../assets/login-bg.png';
 import wavingHand from '../assets/waving-hand.png';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     role: ''
   });
-
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-
   const roleMap = {
     agent: 1,
     auditor: 2,
     "super-admin": 3,
   };
-
   useEffect(() => {
     localStorage.removeItem("agtLoginId");
     localStorage.removeItem("otpExpiry");
     localStorage.removeItem("token");
     localStorage.removeItem("roleId");
   }, []);
-
   const handleChange = (field) => (event) => {
     setFormData(prev => ({
       ...prev,
@@ -54,28 +50,24 @@ const LoginPage = () => {
     }));
     if (error) setError('');
   };
-
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (!formData.email || !formData.password || !formData.role) {
       setError('Please fill all fields');
+      toast.error('Please fill all fields');
       return;
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address');
+      toast.error('Please enter a valid email address');
       return;
     }
-
     setLoading(true);
     setError('');
-
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
@@ -86,49 +78,42 @@ const LoginPage = () => {
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
-          roleId: roleMap[formData.role], // ✅ added
+          roleId: roleMap[formData.role],
         }),
       });
-
       const contentType = response.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         const text = await response.text();
         console.error("Non-JSON response:", text.substring(0, 200));
         throw new Error("Server returned an unexpected response.");
       }
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
-
       localStorage.setItem('agtLoginId', data.agtLoginId);
-      localStorage.setItem('roleId', roleMap[formData.role]); // ✅ added
-
+      localStorage.setItem('roleId', roleMap[formData.role]);
       if (data.expiresAt) {
         localStorage.setItem('otpExpiry', data.expiresAt);
       } else {
         const fallbackExpiry = new Date(Date.now() + 5 * 60 * 1000);
         localStorage.setItem('otpExpiry', fallbackExpiry.toISOString());
       }
-
       localStorage.removeItem('token');
+      toast.success("Check your email for OTP.");
       navigate('/otp');
-
     } catch (error) {
       console.error('Login error:', error);
-
+      let errMsg = error.message || 'Network error. Please check your connection and try again.';
       if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-        setError("Cannot connect to server. Please try again later.");
-      } else {
-        setError(error.message || 'Network error. Please check your connection and try again.');
+        errMsg = "Cannot connect to server. Please try again later.";
       }
+      setError(errMsg);
+      toast.error(errMsg);
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <Paper
       elevation={0}
@@ -157,7 +142,6 @@ const LoginPage = () => {
           sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
       </Box>
-
       <Box
         sx={{
           width: { xs: '100%', lg: '40%' },
@@ -218,7 +202,6 @@ const LoginPage = () => {
               Welcome Back
             </Typography>
           </Box>
-
           {error && (
             <Alert
               severity="error"
@@ -232,7 +215,6 @@ const LoginPage = () => {
               {error}
             </Alert>
           )}
-
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
             <TextField
               fullWidth
@@ -251,7 +233,6 @@ const LoginPage = () => {
                 ),
               }}
             />
-
             <TextField
               fullWidth
               label="Enter your Password"
@@ -281,7 +262,6 @@ const LoginPage = () => {
                 ),
               }}
             />
-
             <FormControl fullWidth sx={{ mb: 4 }} disabled={loading}>
               <InputLabel>Select Role</InputLabel>
               <Select
@@ -295,7 +275,6 @@ const LoginPage = () => {
                 <MenuItem value="super-admin">Super Admin</MenuItem>
               </Select>
             </FormControl>
-
             <Button
               type="submit"
               fullWidth
@@ -305,7 +284,6 @@ const LoginPage = () => {
             >
               {loading ? <CircularProgress size={24} /> : 'Login'}
             </Button>
-
             <Box sx={{ textAlign: 'center' }}>
               <Typography component={Link} to="/forgot-password">
                 Forgot Password?

@@ -34,7 +34,7 @@ import getPastKycCalls from "../api/kyc.api";
 import searchPastKycCalls from "../api/pastsearch";
 
 /* ---------------- debounce hook ---------------- */
-import.meta.env.VITE_API_BASE_URL;
+const api_base_url = import.meta.env.VITE_API_BASE_URL;
 // const api_base_url = `${API_BASE_URL}/api/kyc`;
 const useDebounce = (value, delay = 400) => {
   const [debounced, setDebounced] = useState(value);
@@ -197,20 +197,31 @@ const CustomerTable = () => {
     <div className="card">
       <div className="card-body">
         <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="space-evenly"
-          gap={2}
-          flexWrap="wrap"
+          sx={{
+            display: "flex",
+            flexDirection: {
+              xs: "column",
+              sm: "column",
+              md: "row", // ✅ 1024px now becomes single row
+            },
+            justifyContent: "space-between",
+            alignItems: "center",
+            // mx: 4,
+            gap: 1,
+          }}
         >
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
+            variant="standard" // 🔥 remove scrollable
             sx={{
+              minHeight: 34,
               "& .MuiTabs-flexContainer": {
-                gap: 3,
+                flexWrap: "nowrap",
+                gap: 2,
+              },
+              "& .MuiTabs-indicator": {
+                height: 3,
               },
             }}
           >
@@ -220,13 +231,11 @@ const CustomerTable = () => {
               icon={<GroupsIcon />}
               iconPosition="start"
               sx={{
-                flexDirection: "row",
-                gap: "6px",
-                textTransform: "none",
                 minHeight: 34,
-                "& .MuiTab-iconWrapper": {
-                  marginBottom: "0 !important",
-                },
+                textTransform: "none",
+                flexShrink: 1,
+                minWidth: "unset",
+                whiteSpace: "wrap",
               }}
             />
 
@@ -237,22 +246,7 @@ const CustomerTable = () => {
               iconPosition="start"
               sx={{
                 flexDirection: "row",
-                gap: "6px",
-                textTransform: "none",
-                minHeight: 34,
-                "& .MuiTab-iconWrapper": {
-                  marginBottom: "0 !important",
-                },
-              }}
-            />
-
-            <Tab
-              value="Draft List"
-              label="Draft List"
-              icon={<EditNoteIcon />}
-              iconPosition="start"
-              sx={{
-                flexDirection: "row",
+                gap: "3px",
                 textTransform: "none",
                 minHeight: 34,
                 "& .MuiTab-iconWrapper": {
@@ -277,14 +271,11 @@ const CustomerTable = () => {
             }}
             sx={{
               width: {
-                xs: "400px", // 📱 mobile
-                sm: "240px", // tablet
-                md: "280px", // desktop
+                xs: "100%",
+                sm: "100%",
+                md: "260px", // fits 1024
               },
-              mt: {
-                xs: 1,
-                sm: 0,
-              },
+              flexShrink: 0, // 🔥 search does NOT shrink
             }}
           />
         </Box>

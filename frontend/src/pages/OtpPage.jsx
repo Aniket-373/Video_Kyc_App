@@ -10,11 +10,11 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+// import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import loginImage from "../assets/login-bg.png";
 
-// ---------------------------------------
 // Helper Functions
-// ---------------------------------------
 const getTimeLeft = (expiry) => {
   if (!expiry) return 0;
   const diff = Math.floor((new Date(expiry).getTime() - Date.now()) / 1000);
@@ -32,19 +32,12 @@ const OtpPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ---------------------------------------
-  // Detect LOGIN or FORGOT mode
-  // ---------------------------------------
-const detectMode = () => {
-  // If you are on forgot-password OTP route → always FORGOT
-  if (location.pathname.includes("forgot-password-otp")) {
-    return "FORGOT";
-  }
-
-  // Otherwise → LOGIN
-  return "LOGIN";
-};
-
+  const detectMode = () => {
+    if (location.pathname.includes("forgot-password-otp")) {
+      return "FORGOT";
+    }
+    return "LOGIN";
+  };
 
   const otpPurpose = detectMode();
 
@@ -78,48 +71,32 @@ const detectMode = () => {
 
   const current = config[otpPurpose];
 
-  // ---------------------------------------
-  // States
-  // ---------------------------------------
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(0);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
-
   const inputRefs = useRef([]);
 
-  // ---------------------------------------
-  // Load initial expiry
-  // ---------------------------------------
   useEffect(() => {
     const expiry = localStorage.getItem(current.expiryKey);
     setTimeLeft(getTimeLeft(expiry));
   }, [current.expiryKey]);
 
-  // ---------------------------------------
-  // Timer - updates every second
-  // ---------------------------------------
   useEffect(() => {
     const interval = setInterval(() => {
       const expiry = localStorage.getItem(current.expiryKey);
       const left = getTimeLeft(expiry);
       setTimeLeft(left);
     }, 1000);
-
     return () => clearInterval(interval);
   }, [otpPurpose]);
 
-  // ---------------------------------------
-  // OTP input handlers
-  // ---------------------------------------
   const handleOtpChange = (index, value) => {
     if (value && !/^\d+$/.test(value)) return;
-
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-
     if (value && index < 5) inputRefs.current[index + 1].focus();
     if (error) setError("");
   };
@@ -130,20 +107,21 @@ const detectMode = () => {
     }
   };
 
-  // ---------------------------------------
-  // Verify OTP
-  // ---------------------------------------
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setError("");
-
     const userId = localStorage.getItem(current.userIdKey);
-    if (!userId) return setError("Session expired. Please restart.");
-
-    if (otp.some((d) => d === "")) return setError("Enter all 6 digits");
-
+    if (!userId) {
+      setError("Session expired. Please restart.");
+      toast.error("Session expired. Please restart.");
+      return;
+    }
+    if (otp.some((d) => d === "")) {
+      setError("Enter all 6 digits");
+      toast.warn("Please enter complete 6-digit OTP");
+      return;
+    }
     setLoading(true);
-
     try {
       const res = await fetch(current.verifyEndpoint, {
         method: "POST",
@@ -154,16 +132,16 @@ const detectMode = () => {
           purpose: otpPurpose,
         }),
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Invalid OTP");
-
       current.successAction(data);
       current.cleanup();
-
+      toast.success("OTP verified successfully!Login successful!");
       navigate(current.successRedirect);
     } catch (err) {
-      setError(err.message);
+      const msg = err.message || "Invalid or expired OTP";
+      setError(msg);
+      toast.error(msg);
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
     } finally {
@@ -171,50 +149,44 @@ const detectMode = () => {
     }
   };
 
-  // ---------------------------------------
-  // Resend OTP
-  // ---------------------------------------
   const handleResendOtp = async () => {
     const userId = localStorage.getItem(current.userIdKey);
-    if (!userId) return setError("Session expired");
-
+    if (!userId) {
+      setError("Session expired");
+      toast.error("Session expired");
+      return;
+    }
     setResending(true);
     setError("");
-
     try {
       const res = await fetch(current.resendEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ agtLoginId: Number(userId), purpose: otpPurpose }),
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Failed to resend");
-
       const newExpiry = data.expiresAt
         ? new Date(data.expiresAt)
         : new Date(Date.now() + 5 * 60 * 1000);
-
       localStorage.setItem(current.expiryKey, newExpiry.toISOString());
-
       setTimeLeft(Math.floor((newExpiry.getTime() - Date.now()) / 1000));
       setOtp(["", "", "", "", "", ""]);
       setTimeout(() => inputRefs.current[0]?.focus(), 100);
+      toast.success("New OTP sent successfully!");
     } catch (err) {
-      setError(err.message);
+      const msg = err.message || "Failed to resend OTP";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setResending(false);
     }
   };
 
-  // Focus first input on load
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
 
-  // ---------------------------------------
-  // UI
-  // ---------------------------------------
   return (
     <Paper sx={{ minHeight: "100vh", display: "flex" }}>
       <Box
@@ -225,7 +197,6 @@ const detectMode = () => {
       >
         <img src={loginImage} alt="otp" style={{ width: "100%", height: "100%" }} />
       </Box>
-
       <Box
         sx={{
           width: { xs: "100%", lg: "40%" },
@@ -239,17 +210,14 @@ const detectMode = () => {
           <Typography variant="h4" sx={{ mb: 1 }}>
             OTP Verification
           </Typography>
-
           <Typography sx={{ mb: 3, color: "#555" }}>
             Enter the 6-digit code sent to your email
           </Typography>
-
           {error && (
             <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError("")}>
               {error}
             </Alert>
           )}
-
           <form onSubmit={handleVerifyOtp}>
             <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
               {otp.map((digit, i) => (
@@ -268,21 +236,18 @@ const detectMode = () => {
                 />
               ))}
             </Box>
-
             <Typography sx={{ mb: 2, color: timeLeft < 60 ? "red" : "gray" }}>
               Code expires in <b>{formatTime(timeLeft)}</b>
             </Typography>
-
             <Button
               variant="text"
               onClick={handleResendOtp}
-              disabled={loading}
+              disabled={loading || resending}
               sx={{ mb: 3 }}
               style={{color: "#1C43A6"}}
             >
               {resending ? "Sending..." : "Resend OTP"}
             </Button>
-
             <Button
               type="submit"
               fullWidth
@@ -297,7 +262,6 @@ const detectMode = () => {
                 "Verify & Continue"
               )}
             </Button>
-
             <Typography
               component={Link}
               to={current.backLink}

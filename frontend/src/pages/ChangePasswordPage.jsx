@@ -13,7 +13,8 @@ import {
 } from "@mui/material";
 import { VisibilityOff, Visibility, Lock } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
-
+// import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import loginImage from "../assets/login-bg.png";
 import wavingHand from "../assets/waving-hand.png";
 
@@ -26,7 +27,6 @@ const ChangePasswordPage = () => {
     newPassword: false,
     confirmPassword: false,
   });
-
   const [formData, setFormData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -38,8 +38,6 @@ const ChangePasswordPage = () => {
       ...prev,
       [field]: event.target.value,
     }));
-
-    // Clear errors when user starts typing
     if (error) setError("");
     if (success) setSuccess("");
   };
@@ -51,35 +49,33 @@ const ChangePasswordPage = () => {
     }));
   };
 
-  // Handle password change
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setSuccess("");
 
-    // Validation
-    if (
-      !formData.oldPassword ||
-      !formData.newPassword ||
-      !formData.confirmPassword
-    ) {
+    if (!formData.oldPassword || !formData.newPassword || !formData.confirmPassword) {
       setError("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
     if (formData.newPassword.length < 6) {
       setError("Password must be at least 6 characters long");
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
       setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     const token = localStorage.getItem("token");
     if (!token) {
       setError("You are not logged in. Please login again.");
+      toast.error("Session expired. Please login again.");
       setTimeout(() => navigate("/login"), 2000);
       return;
     }
@@ -99,11 +95,7 @@ const ChangePasswordPage = () => {
             oldPassword: formData.oldPassword,
             newPassword: formData.newPassword,
           }),
-        },
-
-
-        
-
+        }
       );
 
       const data = await response.json();
@@ -113,14 +105,16 @@ const ChangePasswordPage = () => {
       }
 
       setSuccess("Password changed successfully!");
-
-      // Redirect after success
+      toast.success("Password changed successfully!");
       setTimeout(() => {
         navigate("/work-dashboard");
       }, 1500);
+
     } catch (err) {
       console.error("Change password error:", err);
-      setError(err.message || "Something went wrong. Please try again.");
+      const msg = err.message || "Something went wrong. Please try again.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -139,7 +133,6 @@ const ChangePasswordPage = () => {
         overflow: "hidden",
       }}
     >
-      {/* Left Side - Image */}
       <Box
         sx={{
           width: { xs: "0%", lg: "60%" },
@@ -155,8 +148,6 @@ const ChangePasswordPage = () => {
           sx={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       </Box>
-
-      {/* Right Side - Form */}
       <Box
         sx={{
           width: { xs: "100%", lg: "40%" },
@@ -181,7 +172,6 @@ const ChangePasswordPage = () => {
             justifyContent: { xs: "center", sm: "flex-start" },
           }}
         >
-          {/* Header */}
           <Box sx={{ mb: 4, textAlign: "center" }}>
             <Box
               sx={{
@@ -226,8 +216,6 @@ const ChangePasswordPage = () => {
               Create a new secure password for your account
             </Typography>
           </Box>
-
-          {/* Error Alert */}
           {error && (
             <Alert
               severity="error"
@@ -241,8 +229,6 @@ const ChangePasswordPage = () => {
               {error}
             </Alert>
           )}
-
-          {/* Success Alert */}
           {success && (
             <Alert
               severity="success"
@@ -255,10 +241,7 @@ const ChangePasswordPage = () => {
               {success}
             </Alert>
           )}
-
-          {/* Form */}
           <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
-            {/* Old Password */}
             <TextField
               fullWidth
               label="Old Password"
@@ -277,8 +260,6 @@ const ChangePasswordPage = () => {
                 ),
               }}
             />
-
-            {/* New Password */}
             <TextField
               fullWidth
               label="New Password"
@@ -315,19 +296,13 @@ const ChangePasswordPage = () => {
                       sx={{ color: "#6c757d" }}
                       disabled={loading}
                     >
-                      {showPassword.newPassword ? (
-                        <Visibility />
-                      ) : (
-                        <VisibilityOff />
-                      )}
+                      {showPassword.newPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
               helperText="Password must be at least 6 characters long"
             />
-
-            {/* Confirm Password */}
             <TextField
               fullWidth
               label="Confirm New Password"
@@ -359,24 +334,17 @@ const ChangePasswordPage = () => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
-                      onClick={() =>
-                        togglePasswordVisibility("confirmPassword")
-                      }
+                      onClick={() => togglePasswordVisibility("confirmPassword")}
                       edge="end"
                       sx={{ color: "#6c757d" }}
                       disabled={loading}
                     >
-                      {showPassword.confirmPassword ? (
-                        <Visibility />
-                      ) : (
-                        <VisibilityOff />
-                      )}
+                      {showPassword.confirmPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
               }}
             />
-
             <Button
               type="submit"
               fullWidth
@@ -401,7 +369,6 @@ const ChangePasswordPage = () => {
                 "Reset Password"
               )}
             </Button>
-
             <Box sx={{ textAlign: "center", mt: 3 }}>
               <Typography
                 component={Link}
