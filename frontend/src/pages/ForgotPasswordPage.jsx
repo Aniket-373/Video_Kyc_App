@@ -14,7 +14,8 @@ import { Email, CalendarToday } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import loginImage from "../assets/login-bg.png";
 import wavingHand from "../assets/waving-hand.png";
-import toast from 'react-hot-toast';
+import { swalSuccess, swalError, swalWarning } from "../utils/swal";
+
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -40,14 +41,14 @@ const ForgotPasswordPage = () => {
     
     if (!formData.email || !formData.dateOfBirth) {
       setError("Please fill in all fields");
-      toast.error("Please fill in all fields");
+      swalWarning("Validation Error", "Please fill in all fields");
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError("Please enter a valid email address");
-      toast.error("Please enter a valid email address");
+      swalWarning("Invalid Email", "Please enter a valid email address");
       return;
     }
 
@@ -98,7 +99,7 @@ const ForgotPasswordPage = () => {
 
       localStorage.removeItem("resetToken");
       
-      toast.success("Verification code sent to your email!");
+      swalSuccess("OTP Sent", "Verification code sent to your email");
       navigate("/forgot-password-otp");
       
     } catch (err) {
@@ -108,7 +109,7 @@ const ForgotPasswordPage = () => {
         msg = "Cannot connect to server. Please try again later.";
       }
       setError(msg);
-      toast.error(msg);
+      swalError("OTP Error", msg);
     } finally {
       setLoading(false);
     }

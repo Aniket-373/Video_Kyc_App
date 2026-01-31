@@ -18,7 +18,7 @@ import {
 import { VisibilityOff, Visibility, Email, Lock } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 // import { toast } from 'react-toastify';
-import toast from 'react-hot-toast';
+import { swalSuccess, swalError, swalWarning } from "../utils/swal";
 import loginImage from '../assets/login-bg.png';
 import wavingHand from '../assets/waving-hand.png';
 
@@ -57,13 +57,13 @@ const LoginPage = () => {
     event.preventDefault();
     if (!formData.email || !formData.password || !formData.role) {
       setError('Please fill all fields');
-      toast.error('Please fill all fields');
+      swalWarning("Validation Error", "Please fill all fields");
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address');
-      toast.error('Please enter a valid email address');
+      swalWarning("Invalid Email", "Please enter a valid email address");
       return;
     }
     setLoading(true);
@@ -100,7 +100,7 @@ const LoginPage = () => {
         localStorage.setItem('otpExpiry', fallbackExpiry.toISOString());
       }
       localStorage.removeItem('token');
-      toast.success("Check your email for OTP.");
+      swalSuccess("OTP Sent", "Check your email for OTP");
       navigate('/otp');
     } catch (error) {
       console.error('Login error:', error);
@@ -109,7 +109,7 @@ const LoginPage = () => {
         errMsg = "Cannot connect to server. Please try again later.";
       }
       setError(errMsg);
-      toast.error(errMsg);
+      swalError("Login Failed", errMsg);
     } finally {
       setLoading(false);
     }

@@ -14,7 +14,8 @@ import {
 import { VisibilityOff, Visibility, Lock } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 // import { toast } from 'react-toastify';
-import toast from 'react-hot-toast';
+import { swalSuccess, swalError, swalWarning } from "../utils/swal";
+
 import loginImage from "../assets/login-bg.png";
 import wavingHand from "../assets/waving-hand.png";
 
@@ -105,7 +106,7 @@ const ChangePasswordPage = () => {
       }
 
       setSuccess("Password changed successfully!");
-      toast.success("Password changed successfully!");
+      swalSuccess("Success", "Password changed successfully!");
       setTimeout(() => {
         navigate("/work-dashboard");
       }, 1500);
@@ -114,7 +115,7 @@ const ChangePasswordPage = () => {
       console.error("Change password error:", err);
       const msg = err.message || "Something went wrong. Please try again.";
       setError(msg);
-      toast.error(msg);
+      swalError("Failed", msg);
     } finally {
       setLoading(false);
     }

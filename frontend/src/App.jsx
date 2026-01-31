@@ -145,8 +145,6 @@ import OtpPage from "./pages/OtpPage";
 
 import { Routes, Route, useLocation } from "react-router-dom";
 
-import { Toaster } from "react-hot-toast";
-
 function AppContent() {
   const location = useLocation();
 
@@ -175,15 +173,6 @@ function AppContent() {
 
   return (
     <div className="App">
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            fontSize: "14px",
-          },
-        }}
-      />
 
       {isAuthPage ? (
         <Routes>
