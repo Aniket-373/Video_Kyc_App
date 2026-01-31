@@ -186,6 +186,7 @@ const LoginPage = () => {
             </Typography>
           </Box>
 
+          {/* ERROR */}
           {error && (
             <Alert severity="error" sx={{ mb: 3 }}>
               {error}
@@ -199,7 +200,12 @@ const LoginPage = () => {
               value={formData.email}
               onChange={handleChange("email")}
               disabled={loading}
-              sx={{ mb: 3 }}
+              sx={{
+                mb: 3,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                },
+              }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -216,7 +222,12 @@ const LoginPage = () => {
               value={formData.password}
               onChange={handleChange("password")}
               disabled={loading}
-              sx={{ mb: 3 }}
+              sx={{
+                mb: 3,
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                },
+              }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
