@@ -45,6 +45,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
 import panImage from "../../assets/pan.png";
 import { useNavigate } from 'react-router-dom'; 
+import { useSelector } from "react-redux";
 
 const CheckPanDetailsTable = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -61,6 +62,12 @@ const CheckPanDetailsTable = () => {
   const handleFullScreenToggle = (fullScreenState) => {
     setIsFullScreen(fullScreenState);
   };
+
+  //! via redux
+    const customer = useSelector(
+      (state) => state.customer.activeCustomer
+    );
+    console.log("Redux customer:", customer);
 
   const handleNextClick = () => {
     navigate('/final-report'); 
@@ -123,7 +130,7 @@ const CheckPanDetailsTable = () => {
     <>
       <div className="row">
         <div className={isFullScreen ? "col-md-9" : "col-md-3"}>
-          <VideoCallAgentSection onFullScreenToggle={handleFullScreenToggle}/>
+          <VideoCallAgentSection customer={customer} onFullScreenToggle={handleFullScreenToggle}/>
         </div>
         {!isFullScreen && (
           <div className="col-md-3">

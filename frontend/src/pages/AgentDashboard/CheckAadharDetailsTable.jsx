@@ -39,6 +39,7 @@ import VideoCallAgentSection from "../../components/VideoCallAgentSection"
 import VideoCallCustomerSection from "../../components/VideoCallCustomerSection"
 import { Box, Typography, Divider, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; 
+import { useSelector } from "react-redux";
 
 const CheckAadharDetailsTable = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -47,6 +48,12 @@ const CheckAadharDetailsTable = () => {
   const handleFullScreenToggle = (fullScreenState) => {
     setIsFullScreen(fullScreenState);
   };
+
+  //! via redux
+      const customer = useSelector(
+        (state) => state.customer.activeCustomer
+      );
+      console.log("Redux customer:", customer);
 
   const handleNextClick = () => {
     navigate('/check-pan-face'); 
@@ -76,7 +83,7 @@ const CheckAadharDetailsTable = () => {
       <div className="row">
         {/* <HorizontalStepper/> */}
         <div className={isFullScreen ? "col-md-9" : "col-md-3"}>
-          <VideoCallAgentSection onFullScreenToggle={handleFullScreenToggle}/>
+          <VideoCallAgentSection customer={customer} onFullScreenToggle={handleFullScreenToggle}/>
         </div>
         {!isFullScreen && (
           <div className="col-md-3">

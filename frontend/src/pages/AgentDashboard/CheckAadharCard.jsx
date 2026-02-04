@@ -41,6 +41,7 @@ import { Check, Close } from '@mui/icons-material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import dummyImage from "../../assets/dummy.png";
 import { useNavigate } from 'react-router-dom'; 
+import { useSelector } from "react-redux";
 
 const CheckAadharCard = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -51,6 +52,12 @@ const CheckAadharCard = () => {
   const handleFullScreenToggle = (fullScreenState) => {
     setIsFullScreen(fullScreenState);
   };
+
+  //! via redux
+      const customer = useSelector(
+        (state) => state.customer.activeCustomer
+      );
+      console.log("Redux customer:", customer);
 
   const handleNextClick = () => {
     navigate('/check-aadhar-details-table'); 
@@ -73,7 +80,7 @@ const CheckAadharCard = () => {
       <div className="row">
         {/* <HorizontalStepper/> */}
         <div className={isFullScreen ? "col-md-9" : "col-md-3"}>
-          <VideoCallAgentSection onFullScreenToggle={handleFullScreenToggle}/>
+          <VideoCallAgentSection customer={customer} onFullScreenToggle={handleFullScreenToggle}/>
         </div>
         {!isFullScreen && (
           <div className="col-md-3">
